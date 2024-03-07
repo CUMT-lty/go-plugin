@@ -166,13 +166,13 @@ func (d *dispenseServer) Dispense(
 	name string, response *uint32,
 ) error {
 	// Find the function to create this implementation
-	p, ok := d.plugins[name]
+	p, ok := d.plugins[name] // 根据插件名字找插件
 	if !ok {
 		return fmt.Errorf("unknown plugin type: %s", name)
 	}
 
 	// Create the implementation first so we know if there is an error.
-	impl, err := p.Server(d.broker)
+	impl, err := p.Server(d.broker) // 调用插件的 Server 方法呢（此时是在插件进程中）
 	if err != nil {
 		// We turn the error into an errors error so that it works across RPC
 		return errors.New(err.Error())
@@ -192,7 +192,7 @@ func (d *dispenseServer) Dispense(
 			return
 		}
 
-		serve(conn, "Plugin", impl)
+		serve(conn, "Plugin", impl) // 这里真正注册了 rpc 服务
 	}()
 
 	return nil

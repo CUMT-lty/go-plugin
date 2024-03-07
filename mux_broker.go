@@ -29,7 +29,7 @@ import (
 // The broker can be used by either (optionally) to reserve and connect to
 // new multiplexed streams. This is useful for complex args and return values,
 // or anything else you might need a data stream for.
-type MuxBroker struct {
+type MuxBroker struct { // TODO：MuxBroker 是什么
 	nextId  uint32
 	session *yamux.Session
 	streams map[uint32]*muxBrokerPending

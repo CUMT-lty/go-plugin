@@ -143,14 +143,14 @@ func (c *RPCClient) Close() error {
 }
 
 func (c *RPCClient) Dispense(name string) (interface{}, error) {
-	p, ok := c.plugins[name]
+	p, ok := c.plugins[name] // 通过插件名字找插件
 	if !ok {
 		return nil, fmt.Errorf("unknown plugin type: %s", name)
 	}
 
 	var id uint32
-	if err := c.control.Call(
-		"Dispenser.Dispense", name, &id); err != nil {
+	if err := c.control.Call( // control 其实就是一个标准的 rpc 或者 grpc 客户端对象，发起了 rpc 调用
+		"Dispenser.Dispense", name, &id); err != nil { // 调用插件进程上的 Dispense 方法
 		return nil, err
 	}
 
@@ -159,6 +159,10 @@ func (c *RPCClient) Dispense(name string) (interface{}, error) {
 		return nil, err
 	}
 
+	// 现在是在宿主进程上，调用的是插件的 Client 方法，返回的是宿主进程上定义的插件业务实现类对象
+	// TODO：这里的逻辑很重要
+	// 其实就是一个业务接口实现两次
+	// 服务端该怎么实现就怎么实现，客户端实现其实就是 rpc 调用对方的方法
 	return p.Client(c.broker, rpc.NewClient(conn))
 }
 

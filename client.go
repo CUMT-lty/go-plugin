@@ -87,6 +87,7 @@ const defaultPluginLogBufferSize = 64 * 1024
 // does RPC management.
 //
 // See NewClient and ClientConfig for using a Client.
+// 负责一个插件进程的完整生命周期，包括创建插件进程、连接到插件进程、Dispense 业务接口的实现、最后杀死进程。
 type Client struct {
 	config            *ClientConfig
 	exited            bool

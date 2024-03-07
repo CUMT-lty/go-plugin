@@ -9,6 +9,7 @@
 //
 // plugin.Serve fully manages listeners to expose an RPC server from a binary
 // that plugin.Client can connect to.
+
 package plugin
 
 import (
@@ -21,6 +22,8 @@ import (
 
 // Plugin is the interface that is implemented to serve/connect to an
 // inteface implementation.
+// Plugin 接口是逻辑上最上层的接口
+// 插件服务端（插件本身）和插件客户端（插件调用者）都需要实现该接口，只是实现方式不太一样
 type Plugin interface {
 	// Server should return the RPC server compatible struct to serve
 	// the methods that the Client calls over net/rpc.
@@ -33,6 +36,7 @@ type Plugin interface {
 
 // GRPCPlugin is the interface that is implemented to serve/connect to
 // a plugin over gRPC.
+// 和 Plugin 接口同理，只是使用的是 grpc 通信
 type GRPCPlugin interface {
 	// GRPCServer should register this plugin for serving with the
 	// given GRPCServer. Unlike Plugin.Server, this is only called once

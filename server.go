@@ -38,6 +38,8 @@ const CoreProtocolVersion = 1
 //
 // In practice, the plugin host creates a HandshakeConfig that is exported
 // and plugins then can easily consume it.
+// ClientConfig 和 ServeConfig 都会嵌入此结构，此结构用于宿主、插件建立连接前的握手
+// 对于 rpc 通信的 client 和 server 来说，其 ClientConfig 和 ServeConfig 中的配置要保持完全一致
 type HandshakeConfig struct {
 	// ProtocolVersion is the version that clients must match on to
 	// agree they can communicate. This should match the ProtocolVersion
