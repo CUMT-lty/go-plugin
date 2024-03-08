@@ -5,22 +5,31 @@ syntax = "proto3";
 package proto;
 option go_package = "./proto";
 
+// message 关键字是消息定义
+// service 关键字是服务定义
+
+// 请求拿到 key 对应的 value 的消息定义
 message GetRequest {
     string key = 1;
 }
 
+// 响应 key 对应的 value 的消息定义
 message GetResponse {
     bytes value = 1;
 }
 
+// 请求保存一对 key-value 的消息定义
 message PutRequest {
     string key = 1;
     bytes value = 2;
 }
 
+// 响应保存一个 key-value 对的消息定义（空）
 message Empty {}
 
+// 定义服务：KV，这个服务会被编译为 go 中的接口
 service KV {
-    rpc Get(GetRequest) returns (GetResponse);
-    rpc Put(PutRequest) returns (Empty);
+    // 服务提供的方法：被编译为接口中定义的方法
+    rpc Get(GetRequest) returns (GetResponse); // RPC 服务
+    rpc Put(PutRequest) returns (Empty); // RPC 服务
 }

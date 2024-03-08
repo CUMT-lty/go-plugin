@@ -5,14 +5,14 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
-
 	"github.com/hashicorp/go-plugin"
 	"github.com/hashicorp/go-plugin/examples/grpc/shared"
+	"io/ioutil"
 )
 
-// Here is a real implementation of KV that writes to a local file with
+// KV Here is a real implementation of KV that writes to a local file with
 // the key name and the contents are the value of the key.
+// 插件业务实现类
 type KV struct{}
 
 func (KV) Put(key string, value []byte) error {
@@ -28,7 +28,7 @@ func main() {
 	plugin.Serve(&plugin.ServeConfig{
 		HandshakeConfig: shared.Handshake,
 		Plugins: map[string]plugin.Plugin{
-			"kv": &shared.KVGRPCPlugin{Impl: &KV{}},
+			"kv": &shared.KVGRPCPlugin{Impl: &KV{}}, // 这里必须传一个插件业务实现对象
 		},
 
 		// A non-nil value here enables gRPC serving for this plugin...

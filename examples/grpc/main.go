@@ -14,11 +14,18 @@ import (
 	"github.com/hashicorp/go-plugin/examples/grpc/shared"
 )
 
+// PluginMap is the map of plugins we can dispense.
+// 宿主进程上的插件集合
+var PluginMap = map[string]plugin.Plugin{
+	"kv_grpc": &shared.KVGRPCPlugin{}, // 现在用的是 grpc 协议
+	"kv":      &shared.KVPlugin{},
+}
+
 func run() error {
 	// We're a host. Start by launching the plugin process.
 	client := plugin.NewClient(&plugin.ClientConfig{
 		HandshakeConfig: shared.Handshake,
-		Plugins:         shared.PluginMap,
+		Plugins:         PluginMap,
 		Cmd:             exec.Command("sh", "-c", os.Getenv("KV_PLUGIN")),
 		AllowedProtocols: []plugin.Protocol{
 			plugin.ProtocolNetRPC, plugin.ProtocolGRPC},
@@ -43,7 +50,7 @@ func run() error {
 	os.Args = os.Args[1:]
 	switch os.Args[0] {
 	case "get":
-		result, err := kv.Get(os.Args[1])
+		result, err := kv.Get(os.Args[1]) // 这里其实是发起了 grpc 调用
 		if err != nil {
 			return err
 		}
